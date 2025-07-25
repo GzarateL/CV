@@ -1,0 +1,391 @@
+/* ===== PANTALLA DE CARGA ===== */
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(-45deg, #000000, #1a0a2e, #0f0f0f, #2d1b3d);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease-in-out infinite;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+}
+
+.loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Contenedor principal del loader */
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 10;
+    animation: fadeInScale 1.5s ease-out;
+}
+
+/* Logo/Título del loading */
+.loading-title {
+    font-family: 'Le Jour Serif', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #a855f7, #D8A7D8, #ffffff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+    animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+.loading-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.2rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+    animation: subtitleFade 3s ease-in-out infinite;
+}
+
+/* Barra de progreso circular */
+.progress-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 30px;
+}
+
+.progress-ring {
+    width: 120px;
+    height: 120px;
+    transform: rotate(-90deg);
+    filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.6));
+}
+
+.progress-ring-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 4;
+}
+
+.progress-ring-fill {
+    fill: none;
+    stroke: url(#progressGradient);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 339.292; /* 2 * PI * 54 */
+    stroke-dashoffset: 339.292;
+    transition: stroke-dashoffset 0.3s ease;
+    animation: progressPulse 2s ease-in-out infinite;
+}
+
+/* Gradiente para la barra de progreso */
+.progress-gradient {
+    --color1: #a855f7;
+    --color2: #D8A7D8;
+    --color3: #e879f9;
+}
+
+/* Texto del porcentaje */
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
+}
+
+/* Mensajes de carga */
+.loading-message {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+    min-height: 24px;
+    animation: messageFade 0.5s ease-in-out;
+}
+
+/* Partículas de fondo para el loading */
+.loading-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.loading-particle {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: particleFloat 4s linear infinite;
+}
+
+.loading-particle.small {
+    width: 2px;
+    height: 2px;
+    animation-duration: 6s;
+}
+
+.loading-particle.medium {
+    width: 4px;
+    height: 4px;
+    animation-duration: 8s;
+}
+
+.loading-particle.large {
+    width: 6px;
+    height: 6px;
+    animation-duration: 10s;
+}
+
+/* Efectos de luz pulsante */
+.loading-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.1), transparent);
+    border-radius: 50%;
+    animation: glowPulse 3s ease-in-out infinite;
+    z-index: 0;
+}
+
+/* ===== ANIMACIONES ===== */
+
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes titleGlow {
+    0% {
+        text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+        transform: scale(1);
+    }
+    100% {
+        text-shadow:
+            0 0 30px rgba(168, 85, 247, 0.8),
+            0 0 40px rgba(232, 121, 249, 0.6);
+        transform: scale(1.02);
+    }
+}
+
+@keyframes subtitleFade {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.4; }
+}
+
+@keyframes progressPulse {
+    0%, 100% {
+        stroke-width: 4;
+        filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.6));
+    }
+    50% {
+        stroke-width: 6;
+        filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.9));
+    }
+}
+
+@keyframes messageFade {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 0.7;
+        transform: translateY(0);
+    }
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-20px) translateX(100px);
+        opacity: 0;
+    }
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.2;
+    }
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablets */
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+    .loading-title {
+        font-size: 3.5rem;
+    }
+    
+    .loading-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .progress-container {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .progress-ring {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .progress-text {
+        font-size: 1.3rem;
+    }
+}
+
+/* Mobile Landscape */
+@media screen and (max-width: 768px) and (min-width: 481px) {
+    .loading-title {
+        font-size: 2.8rem;
+        letter-spacing: 2px;
+    }
+    
+    .loading-subtitle {
+        font-size: 1rem;
+        letter-spacing: 1.5px;
+    }
+    
+    .progress-container {
+        width: 90px;
+        height: 90px;
+        margin-bottom: 25px;
+    }
+    
+    .progress-ring {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .progress-text {
+        font-size: 1.2rem;
+    }
+    
+    .loading-message {
+        font-size: 0.9rem;
+    }
+    
+    .loading-glow {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+/* Mobile Portrait */
+@media screen and (max-width: 480px) {
+    .loading-title {
+        font-size: 2.2rem;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+    }
+    
+    .loading-subtitle {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+    }
+    
+    .progress-container {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+    }
+    
+    .progress-ring {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .progress-text {
+        font-size: 1rem;
+    }
+    
+    .loading-message {
+        font-size: 0.8rem;
+        padding: 0 20px;
+    }
+    
+    .loading-glow {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .loading-particle {
+        animation-duration: 8s;
+    }
+}
+
+/* Pantallas muy pequeñas */
+@media screen and (max-width: 320px) {
+    .loading-title {
+        font-size: 1.8rem;
+    }
+    
+    .loading-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .progress-container {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .progress-ring {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .progress-text {
+        font-size: 0.9rem;
+    }
+}

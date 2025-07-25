@@ -6,8 +6,12 @@
     <title>Gael Zárate</title>
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/universe-background.css">
+    <link rel="stylesheet" href="css/loading-screen.css">
 </head>
 <body>
+    <!-- La pantalla de carga se crea automáticamente con JavaScript -->
+    
     <!-- Audio de fondo -->
     <audio id="backgroundMusic" loop>
         <source src="assets/audio/I'll Take Care of You.mp3" type="audio/mpeg">
@@ -79,6 +83,9 @@
         <button class="nav-btn" data-section="projects" id="projectsBtn">PROYECTOS</button>
     </div>
 
+    <!-- Scripts: El loading debe cargarse PRIMERO -->
+    <script src="js/loading-screen.js"></script>
+    <script src="js/universe-background.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>
