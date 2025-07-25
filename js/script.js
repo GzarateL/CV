@@ -7,15 +7,13 @@ let backgroundMusic = document.getElementById('backgroundMusic');
 const translations = {
     es: {
         subtitle: "DISEÑADOR Y DESARROLLADOR DE SOFTWARE",
-        aboutBtn: "SOBRE MÍ",
         skillsBtn: "HABILIDADES",
-        contactBtn: "CONTACTO"
+        projectsBtn: "PROYECTOS"
     },
     en: {
         subtitle: "SOFTWARE DESIGNER AND DEVELOPER",
-        aboutBtn: "ABOUT ME",
         skillsBtn: "SKILLS",
-        contactBtn: "CONTACT"
+        projectsBtn: "PROJECTS"
     }
 };
 
@@ -59,9 +57,8 @@ function updateTexts() {
     const texts = translations[currentLang];
     
     document.getElementById('subtitle').textContent = texts.subtitle;
-    document.getElementById('aboutBtn').textContent = texts.aboutBtn;
     document.getElementById('skillsBtn').textContent = texts.skillsBtn;
-    document.getElementById('contactBtn').textContent = texts.contactBtn;
+    document.getElementById('projectsBtn').textContent = texts.projectsBtn;
 }
 
 // Navegación
@@ -80,12 +77,6 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
         // Placeholder para futuras secciones
         // navigateToSection(section);
     });
-});
-
-// Control de menú (placeholder)
-document.getElementById('menuBtn').addEventListener('click', function() {
-    console.log('Menú clickeado');
-    // Aquí puedes agregar la lógica del menú
 });
 
 // Función para cargar la imagen del personaje
@@ -138,8 +129,8 @@ function animateCharacterFollow() {
     const deltaX = mouseX - centerX;
     const deltaY = mouseY - centerY;
     
-    // Limitar el rango de movimiento (más notorio)
-    const maxMove = 25; // Máximo 25px de movimiento
+    // Limitar el rango de movimiento (más sutil en móviles)
+    const maxMove = window.innerWidth <= 768 ? 15 : 25;
     const moveX = Math.max(-maxMove, Math.min(maxMove, deltaX * 0.035));
     const moveY = Math.max(-maxMove, Math.min(maxMove, deltaY * 0.035));
     
@@ -172,12 +163,28 @@ function toggleMouseTracking() {
     }
 }
 
+// Pausar el seguimiento en dispositivos móviles para mejor rendimiento
+function handleMobileInteractions() {
+    if (window.innerWidth <= 768) {
+        isMouseTracking = false;
+    } else {
+        isMouseTracking = true;
+    }
+}
+
 // Inicializar el efecto cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
+    handleMobileInteractions();
+    
     // Esperar un poco para que la imagen se cargue completamente
     setTimeout(() => {
         animateCharacterFollow();
     }, 500);
+});
+
+// Manejar cambios de orientación y redimensionamiento
+window.addEventListener('resize', function() {
+    handleMobileInteractions();
 });
 
 // Pausar el seguimiento cuando el mouse sale de la ventana
@@ -190,7 +197,9 @@ document.addEventListener('mouseleave', function() {
 
 // Reanudar cuando el mouse vuelve a entrar
 document.addEventListener('mouseenter', function() {
-    isMouseTracking = true;
+    if (window.innerWidth > 768) {
+        isMouseTracking = true;
+    }
 });
 
 // Inicializar
