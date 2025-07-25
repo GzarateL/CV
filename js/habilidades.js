@@ -1,4 +1,178 @@
-// ===== SISTEMA DE HABILIDADES =====
+// ===== SISTEMA DE HABILIDADES CON UNIVERSO COMPLETO =====
+
+class SkillsUniverseBackground {
+    constructor() {
+        this.container = null;
+        this.stars = [];
+        this.asteroids = [];
+        this.mouseX = 0;
+        this.mouseY = 0;
+        this.isInitialized = false;
+        
+        this.init();
+    }
+    
+    init() {
+        this.createContainer();
+        this.generateStars();
+        this.generateAsteroids();
+        this.createNebulas();
+        this.setupMouseTracking();
+        this.startAnimation();
+        this.isInitialized = true;
+        console.log('🌌 Universo de habilidades inicializado');
+    }
+    
+    createContainer() {
+        this.container = document.createElement('div');
+        this.container.className = 'skills-universe-container';
+        this.container.innerHTML = `
+            <div class="skills-stars-layer layer-1"></div>
+            <div class="skills-stars-layer layer-2"></div>
+            <div class="skills-stars-layer layer-3"></div>
+        `;
+        
+        // Insertar en la sección de habilidades
+        const skillsSection = document.querySelector('.skills-section');
+        if (skillsSection) {
+            skillsSection.insertBefore(this.container, skillsSection.firstChild);
+        }
+    }
+    
+    generateStars() {
+        const layers = this.container.querySelectorAll('.skills-stars-layer');
+        const starCounts = [60, 45, 30]; // Cantidades optimizadas para habilidades
+        const starSizes = ['small', 'medium', 'large'];
+        
+        layers.forEach((layer, layerIndex) => {
+            for (let i = 0; i < starCounts[layerIndex]; i++) {
+                const star = document.createElement('div');
+                star.className = `skills-star ${starSizes[Math.floor(Math.random() * starSizes.length)]}`;
+                
+                // Posición aleatoria
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                // Delay aleatorio para la animación
+                star.style.animationDelay = Math.random() * 3 + 's';
+                
+                layer.appendChild(star);
+                this.stars.push({
+                    element: star,
+                    baseX: parseFloat(star.style.left),
+                    baseY: parseFloat(star.style.top),
+                    layer: layerIndex + 1
+                });
+            }
+        });
+    }
+    
+    generateAsteroids() {
+        const layer = this.container.querySelector('.skills-stars-layer.layer-2');
+        const asteroidCount = 12;
+        const asteroidSizes = ['small', 'medium', 'large'];
+        
+        for (let i = 0; i < asteroidCount; i++) {
+            const asteroid = document.createElement('div');
+            asteroid.className = `skills-asteroid ${asteroidSizes[Math.floor(Math.random() * asteroidSizes.length)]}`;
+            
+            // Posición aleatoria
+            asteroid.style.left = Math.random() * 100 + '%';
+            asteroid.style.top = Math.random() * 100 + '%';
+            
+            // Delay aleatorio para la animación
+            asteroid.style.animationDelay = Math.random() * 8 + 's';
+            
+            layer.appendChild(asteroid);
+            this.asteroids.push({
+                element: asteroid,
+                baseX: parseFloat(asteroid.style.left),
+                baseY: parseFloat(asteroid.style.top),
+                speed: 0.5 + Math.random() * 0.5
+            });
+        }
+    }
+    
+    createNebulas() {
+        const nebulas = [
+            { class: 'skills-nebula skills-nebula-1' },
+            { class: 'skills-nebula skills-nebula-2' },
+            { class: 'skills-nebula skills-nebula-3' }
+        ];
+        
+        nebulas.forEach(nebulaConfig => {
+            const nebula = document.createElement('div');
+            nebula.className = nebulaConfig.class;
+            this.container.appendChild(nebula);
+        });
+    }
+    
+    setupMouseTracking() {
+        document.addEventListener('mousemove', (e) => {
+            this.mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            this.mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+        });
+    }
+    
+    startAnimation() {
+        this.animate();
+    }
+    
+    animate() {
+        // Animar estrellas con parallax sutil
+        this.stars.forEach(star => {
+            const parallaxStrength = star.layer * 0.3;
+            const moveX = this.mouseX * parallaxStrength;
+            const moveY = this.mouseY * parallaxStrength;
+            
+            star.element.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+        
+        // Animar asteroides
+        this.asteroids.forEach(asteroid => {
+            const moveX = this.mouseX * asteroid.speed * 1.5;
+            const moveY = this.mouseY * asteroid.speed * 1.5;
+            
+            asteroid.element.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+        
+        requestAnimationFrame(() => this.animate());
+    }
+    
+    destroy() {
+        if (this.container && this.container.parentNode) {
+            this.container.parentNode.removeChild(this.container);
+        }
+        this.isInitialized = false;
+        console.log('🌌 Universo de habilidades destruido');
+    }
+    
+    toggleMobileOptimization() {
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+            this.stars.forEach((star, index) => {
+                if (index % 2 === 0) {
+                    star.element.style.display = 'none';
+                }
+            });
+            
+            this.asteroids.forEach((asteroid, index) => {
+                if (index % 3 === 0) {
+                    asteroid.element.style.display = 'none';
+                }
+            });
+        } else {
+            this.stars.forEach(star => {
+                star.element.style.display = 'block';
+            });
+            
+            this.asteroids.forEach(asteroid => {
+                asteroid.element.style.display = 'block';
+            });
+        }
+    }
+}
 
 class SkillsPage {
     constructor() {
@@ -31,15 +205,12 @@ class SkillsPage {
         this.setupAnimations();
     }
     
-    // INICIALIZAR EL FONDO DEL UNIVERSO
+    // INICIALIZAR EL FONDO DEL UNIVERSO COMPLETO
     initializeUniverse() {
-        // Esperar un poco para que el DOM esté listo
         setTimeout(() => {
-            if (window.UniverseBackground && !window.universeBackground) {
-                this.universeBackground = new window.UniverseBackground();
-                console.log('🌌 Universo inicializado en habilidades');
-            }
-        }, 200);
+            this.universeBackground = new SkillsUniverseBackground();
+            console.log('🌌 Universo de habilidades inicializado completamente');
+        }, 300);
     }
     
     setupEventListeners() {
@@ -155,11 +326,8 @@ class SkillsPage {
         // Crear efecto de click
         this.createClickEffect(card, event);
         
-        // Log para debug (puedes expandir esto para mostrar info de la tecnología)
+        // Log para debug
         console.log(`Clicked on: ${techName}`);
-        
-        // Aquí puedes agregar lógica para mostrar más información sobre la tecnología
-        // Por ejemplo: abrir un modal, mostrar descripción, etc.
     }
     
     createHoverParticles(card) {
@@ -314,7 +482,7 @@ class SkillsPage {
         }, 300);
     }
     
-    // Método para agregar una nueva habilidad dinámicamente (opcional)
+    // Método para agregar una nueva habilidad dinámicamente
     addSkill(techName, displayName, isBasic = false) {
         const container = document.querySelector('.skills-grid-container');
         if (!container) return;
@@ -346,9 +514,8 @@ class SkillsPage {
         }, 100);
     }
     
-    // Método para filtrar habilidades por categoría (opcional)
+    // Método para filtrar habilidades por categoría
     filterSkills(category) {
-        // Definir categorías
         const categories = {
             frontend: ['html', 'css', 'typescript', 'react', 'nextjs'],
             backend: ['nodejs', 'python', 'php', 'laravel'],
@@ -380,7 +547,7 @@ class SkillsPage {
         });
     }
     
-    // Método para búsqueda de habilidades (opcional)
+    // Método para búsqueda de habilidades
     searchSkills(searchTerm) {
         const term = searchTerm.toLowerCase();
         
@@ -416,12 +583,12 @@ class SkillsPage {
 
 // Inicialización cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Iniciando página de habilidades...');
+    console.log('🚀 Iniciando página de habilidades con universo completo...');
     
     // Esperar un poco para que los elementos se rendericen
     setTimeout(() => {
         window.skillsPageInstance = new SkillsPage();
-        console.log('✅ Página de habilidades inicializada');
+        console.log('✅ Página de habilidades con universo completo inicializada');
     }, 100);
 });
 
@@ -440,6 +607,11 @@ window.addEventListener('resize', function() {
         cards.forEach(card => {
             card.style.transition = 'all 0.2s ease';
         });
+        
+        // Optimizar universo en móviles
+        if (window.skillsPageInstance.universeBackground) {
+            window.skillsPageInstance.universeBackground.toggleMobileOptimization();
+        }
     }
 });
 
@@ -453,5 +625,20 @@ document.addEventListener('touchmove', function(e) {
     }
 }, { passive: false });
 
+// Pausar animaciones cuando la pestaña no está visible
+document.addEventListener('visibilitychange', function() {
+    if (window.skillsPageInstance && window.skillsPageInstance.universeBackground) {
+        const container = window.skillsPageInstance.universeBackground.container;
+        if (container) {
+            if (document.hidden) {
+                container.style.animationPlayState = 'paused';
+            } else {
+                container.style.animationPlayState = 'running';
+            }
+        }
+    }
+});
+
 // Exportar para uso global
 window.SkillsPage = SkillsPage;
+window.SkillsUniverseBackground = SkillsUniverseBackground

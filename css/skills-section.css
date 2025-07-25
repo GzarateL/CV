@@ -1,4 +1,4 @@
-/* ===== SECCIÓN DE HABILIDADES - VERSIÓN ACTUALIZADA ===== */
+/* ===== SECCIÓN DE HABILIDADES - VERSIÓN ACTUALIZADA CON UNIVERSO COMPLETO ===== */
 
 .skills-section {
     position: fixed;
@@ -6,7 +6,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /* Fondo del universo añadido */
+    /* FONDO DEL UNIVERSO COMPLETO - IGUAL QUE INDEX Y LOADING */
     background: linear-gradient(-45deg, #000000, #1a0a2e, #0f0f0f, #2d1b3d);
     background-size: 400% 400%;
     animation: gradientShift 8s ease-in-out infinite;
@@ -22,7 +22,7 @@
     padding: 60px 20px 40px;
 }
 
-/* Animación del fondo universo */
+/* ANIMACIÓN DEL FONDO UNIVERSO - SINCRONIZADA */
 @keyframes gradientShift {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -34,12 +34,158 @@
     visibility: visible;
 }
 
+/* ===== ELEMENTOS DEL UNIVERSO EN HABILIDADES ===== */
+
+/* Contenedor del universo específico para habilidades */
+.skills-universe-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* Capas de estrellas */
+.skills-stars-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+}
+
+.skills-star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: skillsStarTwinkle 3s ease-in-out infinite alternate;
+}
+
+.skills-star.small {
+    width: 1px;
+    height: 1px;
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.skills-star.medium {
+    width: 2px;
+    height: 2px;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+}
+
+.skills-star.large {
+    width: 3px;
+    height: 3px;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+}
+
+/* Animación de parpadeo de estrellas */
+@keyframes skillsStarTwinkle {
+    0% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0.6; transform: scale(1); }
+}
+
+/* Asteroides en habilidades */
+.skills-asteroid {
+    position: absolute;
+    background: linear-gradient(135deg, #4a4a4a, #2a2a2a);
+    border-radius: 50% 40% 60% 30%;
+    opacity: 0.6;
+    animation: skillsAsteroidFloat 8s ease-in-out infinite alternate;
+    box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.skills-asteroid.small {
+    width: 4px;
+    height: 4px;
+}
+
+.skills-asteroid.medium {
+    width: 8px;
+    height: 8px;
+}
+
+.skills-asteroid.large {
+    width: 12px;
+    height: 12px;
+}
+
+/* Animación de flotación de asteroides */
+@keyframes skillsAsteroidFloat {
+    0% { transform: translateY(0px) rotate(0deg); opacity: 0.4; }
+    50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
+    100% { transform: translateY(0px) rotate(360deg); opacity: 0.4; }
+}
+
+/* Nebulosas para habilidades */
+.skills-nebula {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.1;
+    animation: skillsNebulaMove 15s ease-in-out infinite alternate;
+}
+
+.skills-nebula-1 {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.3), transparent);
+    top: 20%;
+    left: 10%;
+}
+
+.skills-nebula-2 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(232, 121, 249, 0.2), transparent);
+    top: 60%;
+    right: 15%;
+    animation-delay: -5s;
+}
+
+.skills-nebula-3 {
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.25), transparent);
+    bottom: 30%;
+    left: 60%;
+    animation-delay: -10s;
+}
+
+@keyframes skillsNebulaMove {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -20px) scale(1.1); }
+    66% { transform: translate(-20px, 30px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
+}
+
+/* Efectos de parallax para diferentes capas */
+.skills-stars-layer.layer-1 {
+    z-index: -3;
+}
+
+.skills-stars-layer.layer-2 {
+    z-index: -2;
+}
+
+.skills-stars-layer.layer-3 {
+    z-index: -1;
+}
+
+/* ===== CONTENIDO PRINCIPAL DE HABILIDADES ===== */
+
 /* Contenedor principal de habilidades */
 .skills-container {
     max-width: 1400px;
     width: 100%;
     text-align: center;
     animation: skillsFadeIn 1s ease-out;
+    z-index: 10;
+    position: relative;
 }
 
 /* Títulos */
@@ -53,7 +199,8 @@
     -webkit-text-fill-color: transparent;
     margin-bottom: 15px;
     letter-spacing: 3px;
-
+    z-index: 10;
+    position: relative;
 }
 
 .skills-subtitle {
@@ -62,6 +209,8 @@
     font-weight: 300;
     letter-spacing: 2px;
     margin-bottom: 60px;
+    z-index: 10;
+    position: relative;
 }
 
 /* Grid principal de habilidades */
@@ -72,6 +221,8 @@
     justify-items: center;
     max-width: 1200px;
     margin: 0 auto;
+    z-index: 10;
+    position: relative;
 }
 
 /* Tarjetas de habilidades */
@@ -95,6 +246,7 @@
     justify-content: center;
     text-align: center;
     animation: cardSlideIn 0.8s ease-out;
+    z-index: 10;
 }
 
 /* Efecto hover */
@@ -208,17 +360,6 @@
     }
 }
 
-@keyframes subtitleFloat {
-    0% {
-        transform: translateY(0px);
-        opacity: 0.9;
-    }
-    100% {
-        transform: translateY(-3px);
-        opacity: 1;
-    }
-}
-
 @keyframes cardSlideIn {
     0% {
         opacity: 0;
@@ -231,6 +372,37 @@
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
+
+/* Responsive para dispositivos móviles */
+@media screen and (max-width: 768px) {
+    .skills-star {
+        animation-duration: 4s;
+    }
+    
+    .skills-asteroid {
+        animation-duration: 10s;
+    }
+    
+    .skills-nebula {
+        filter: blur(30px);
+        opacity: 0.08;
+    }
+    
+    .skills-nebula-1, .skills-nebula-2, .skills-nebula-3 {
+        transform: scale(0.7);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .skills-nebula {
+        filter: blur(25px);
+        opacity: 0.06;
+    }
+    
+    .skills-nebula-1, .skills-nebula-2, .skills-nebula-3 {
+        transform: scale(0.5);
+    }
+}
 
 /* Tablets */
 @media screen and (max-width: 1024px) and (min-width: 769px) {
