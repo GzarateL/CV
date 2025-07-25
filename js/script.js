@@ -61,7 +61,7 @@ function updateTexts() {
     document.getElementById('projectsBtn').textContent = texts.projectsBtn;
 }
 
-// Navegación
+// Navegación - ACTUALIZADO
 document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', function() {
         // Remover clase active de todos los botones
@@ -70,14 +70,84 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
         // Agregar clase active al botón clickeado
         this.classList.add('active');
         
-        // Aquí puedes agregar la lógica para cambiar de sección
+        // Obtener la sección
         const section = this.dataset.section;
         console.log('Navegando a:', section);
         
-        // Placeholder para futuras secciones
-        // navigateToSection(section);
+        // Navegar según la sección
+        navigateToSection(section);
     });
 });
+
+// Función para navegar a diferentes secciones
+function navigateToSection(section) {
+    switch(section) {
+        case 'skills':
+            // Efecto de transición antes de navegar
+            document.body.style.opacity = '0.8';
+            document.body.style.transform = 'scale(0.98)';
+            
+            setTimeout(() => {
+                window.location.href = 'habilidades.html';
+            }, 200);
+            break;
+        case 'projects':
+            // Placeholder para proyectos (puedes crear proyectos.html después)
+            console.log('Navegación a proyectos - En desarrollo');
+            
+            // Mostrar mensaje estilizado en lugar de alert
+            showNotification('Sección de proyectos en desarrollo 🚧', 'info');
+            break;
+        default:
+            console.log('Sección no reconocida:', section);
+    }
+}
+
+// Función para mostrar notificaciones estilizadas
+function showNotification(message, type = 'info') {
+    // Crear elemento de notificación
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: rgba(168, 85, 247, 0.95);
+        color: white;
+        padding: 20px 30px;
+        border-radius: 15px;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        z-index: 10000;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-align: center;
+        max-width: 400px;
+        transition: all 0.3s ease;
+    `;
+    
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    // Animación de entrada
+    setTimeout(() => {
+        notification.style.transform = 'translate(-50%, -50%) scale(1)';
+    }, 10);
+    
+    // Eliminar después de 3 segundos
+    setTimeout(() => {
+        notification.style.transform = 'translate(-50%, -50%) scale(0)';
+        notification.style.opacity = '0';
+        
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
 
 // Función para cargar la imagen del personaje
 function loadCharacterImage(imagePath) {

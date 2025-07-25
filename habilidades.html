@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gael Zárate - Habilidades</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/universe-background.css">
+    <link rel="stylesheet" href="css/loading-screen.css">
+    <link rel="stylesheet" href="css/skills-section.css">
+</head>
+<body>
+    <!-- Audio de fondo -->
+    <audio id="backgroundMusic" loop>
+        <source src="assets/audio/I'll Take Care of You.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <!-- Controles superiores -->
+    <div class="top-controls">
+        <button id="audioBtn" class="control-btn" title="Audio">
+            <svg id="audioIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+            </svg>
+        </button>
+        <button id="langBtn" class="control-btn" title="Idioma">
+            <span id="langText">ES</span>
+        </button>
+    </div>
+
+    <!-- Sección de Habilidades -->
+    <div class="skills-section active" id="skillsSection">
+        <!-- Botón de regreso -->
+        <button class="back-button" id="backToMain">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.41L5.83 13H21V7z"/>
+            </svg>
+        </button>
+        
+        <!-- Contenido principal -->
+        <div class="skills-container">
+            <h2 class="skills-title">HABILIDADES</h2>
+            <p class="skills-subtitle">TECNOLOGÍAS QUE DOMINO</p>
+            
+            <div class="skills-grid-container">
+                <!-- Frontend -->
+                <div class="skill-card" data-tech="html">
+                    <span class="skill-name">HTML</span>
+                </div>
+                
+                <div class="skill-card" data-tech="css">
+                    <span class="skill-name">CSS</span>
+                </div>
+                
+                <div class="skill-card" data-tech="typescript">
+                    <span class="skill-name">TypeScript</span>
+                </div>
+                
+                <div class="skill-card" data-tech="react">
+                    <span class="skill-name">React</span>
+                </div>
+                
+                <div class="skill-card" data-tech="nextjs">
+                    <span class="skill-name">Next.js</span>
+                </div>
+                
+                <!-- Backend -->
+                <div class="skill-card" data-tech="nodejs">
+                    <span class="skill-name">Node.js</span>
+                </div>
+                
+                <div class="skill-card" data-tech="python">
+                    <span class="skill-name">Python</span>
+                </div>
+                
+                <div class="skill-card" data-tech="php">
+                    <span class="skill-name">PHP</span>
+                </div>
+                
+                <div class="skill-card" data-tech="laravel">
+                    <span class="skill-name">Laravel</span>
+                </div>
+                
+                <!-- Bases de Datos -->
+                <div class="skill-card" data-tech="mongodb">
+                    <span class="skill-name">MongoDB</span>
+                </div>
+                
+                <div class="skill-card" data-tech="mysql">
+                    <span class="skill-name">MySQL</span>
+                </div>
+                
+                <!-- Mobile -->
+                <div class="skill-card" data-tech="flutter">
+                    <span class="skill-name">Flutter</span>
+                </div>
+                
+                <div class="skill-card" data-tech="kotlin">
+                    <span class="skill-name">Kotlin</span>
+                </div>
+                
+                <div class="skill-card" data-tech="swift">
+                    <span class="skill-name">Swift</span>
+                </div>
+                
+                <!-- IoT -->
+                <div class="skill-card" data-tech="arduino">
+                    <span class="skill-name">Arduino IDE</span>
+                </div>
+                
+                <!-- Herramientas -->
+                <div class="skill-card" data-tech="git">
+                    <span class="skill-name">Git</span>
+                </div>
+                
+                <div class="skill-card" data-tech="github">
+                    <span class="skill-name">GitHub</span>
+                </div>
+                
+                <div class="skill-card" data-tech="fork">
+                    <span class="skill-name">Fork</span>
+                </div>
+                
+                <div class="skill-card" data-tech="vscode">
+                    <span class="skill-name">VS Code</span>
+                </div>
+                
+                <div class="skill-card" data-tech="androidstudio">
+                    <span class="skill-name">Android Studio</span>
+                </div>
+                
+                <div class="skill-card" data-tech="xampp">
+                    <span class="skill-name">XAMPP</span>
+                </div>
+                
+                <!-- DevOps -->
+                <div class="skill-card masomenos" data-tech="docker">
+                    <span class="skill-name">Docker</span>
+                    <span class="skill-level">Básico</span>
+                </div>
+                
+                <div class="skill-card masomenos" data-tech="aws">
+                    <span class="skill-name">AWS</span>
+                    <span class="skill-level">Básico</span>
+                </div>
+                
+                <!-- Testing/API -->
+                <div class="skill-card" data-tech="postman">
+                    <span class="skill-name">Postman</span>
+                </div>
+                
+                <!-- Design -->
+                <div class="skill-card" data-tech="figma">
+                    <span class="skill-name">Figma</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/loading-screen.js"></script>
+    <script src="js/universe-background.js"></script>
+    <script src="js/habilidades.js"></script>
+</body>
+</html>
