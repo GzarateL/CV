@@ -79,7 +79,7 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
     });
 });
 
-// Función para navegar a diferentes secciones
+// Función para navegar a diferentes secciones - ACTUALIZADA
 function navigateToSection(section) {
     switch(section) {
         case 'skills':
@@ -92,11 +92,13 @@ function navigateToSection(section) {
             }, 200);
             break;
         case 'projects':
-            // Placeholder para proyectos (puedes crear proyectos.html después)
-            console.log('Navegación a proyectos - En desarrollo');
+            // Efecto de transición antes de navegar a proyectos
+            document.body.style.opacity = '0.8';
+            document.body.style.transform = 'scale(0.98)';
             
-            // Mostrar mensaje estilizado en lugar de alert
-            showNotification('Sección de proyectos en desarrollo 🚧', 'info');
+            setTimeout(() => {
+                window.location.href = 'proyectos.html';
+            }, 200);
             break;
         default:
             console.log('Sección no reconocida:', section);
@@ -242,6 +244,76 @@ function handleMobileInteractions() {
     }
 }
 
+// ===== EFECTOS ADICIONALES PARA NAVEGACIÓN =====
+
+// Efecto de partículas al hacer click en los botones de navegación
+function createNavigationParticles(button) {
+    const rect = button.getBoundingClientRect();
+    const particleCount = 8;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.style.cssText = `
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #a855f7, #e879f9);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            left: ${rect.left + rect.width/2}px;
+            top: ${rect.top + rect.height/2}px;
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        `;
+        
+        document.body.appendChild(particle);
+        
+        // Animar partícula
+        const angle = (Math.PI * 2 * i) / particleCount;
+        const distance = 40 + Math.random() * 20;
+        const duration = 800 + Math.random() * 400;
+        
+        particle.animate([
+            {
+                transform: 'translate(-50%, -50%) scale(1)',
+                opacity: 1
+            },
+            {
+                transform: `translate(${-50 + Math.cos(angle) * distance}%, ${-50 + Math.sin(angle) * distance}%) scale(0)`,
+                opacity: 0
+            }
+        ], {
+            duration: duration,
+            easing: 'ease-out'
+        }).onfinish = () => {
+            if (document.body.contains(particle)) {
+                document.body.removeChild(particle);
+            }
+        };
+    }
+}
+
+// Agregar efectos a los botones de navegación
+document.addEventListener('DOMContentLoaded', function() {
+    const navButtons = document.querySelectorAll('.nav-btn');
+    
+    navButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            createNavigationParticles(this);
+        });
+        
+        // Efecto de hover mejorado
+        btn.addEventListener('mouseenter', function() {
+            this.style.boxShadow = '0 8px 25px rgba(168, 85, 247, 0.3)';
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+            this.style.boxShadow = 'none';
+        });
+    });
+});
+
 // Inicializar el efecto cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
     handleMobileInteractions();
@@ -250,6 +322,22 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         animateCharacterFollow();
     }, 500);
+    
+    // Agregar efectos de transición suave a todos los elementos principales
+    const mainElements = [
+        '.main-title',
+        '.subtitle', 
+        '.social-icons',
+        '.character-container',
+        '.bottom-bar'
+    ];
+    
+    mainElements.forEach(selector => {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.style.transition = 'all 0.3s ease';
+        }
+    });
 });
 
 // Manejar cambios de orientación y redimensionamiento
@@ -272,5 +360,84 @@ document.addEventListener('mouseenter', function() {
     }
 });
 
+// ===== FUNCIONES DE UTILIDAD GLOBALES =====
+
+// Función para crear efectos de transición entre páginas
+function createPageTransition(targetPage) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, #a855f7, #1a0a2e);
+        z-index: 10000;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 600;
+    `;
+    
+    overlay.innerHTML = `
+        <div style="text-align: center;">
+            <div style="width: 40px; height: 40px; border: 3px solid white; border-top: 3px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+            Cargando...
+        </div>
+    `;
+    
+    // Agregar animación de rotación
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    document.body.appendChild(overlay);
+    
+    setTimeout(() => {
+        overlay.style.opacity = '1';
+    }, 10);
+    
+    setTimeout(() => {
+        window.location.href = targetPage;
+    }, 800);
+}
+
+// Función para detectar si el usuario prefiere animaciones reducidas
+function respectsReducedMotion() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+// Optimización de rendimiento: pausar animaciones innecesarias
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+        // Pausar animaciones cuando la pestaña no está visible
+        isMouseTracking = false;
+        document.body.style.animationPlayState = 'paused';
+    } else {
+        // Reanudar animaciones
+        if (window.innerWidth > 768) {
+            isMouseTracking = true;
+        }
+        document.body.style.animationPlayState = 'running';
+    }
+});
+
 // Inicializar
 loadCharacterImage('assets/images/personaje_inicio.png');
+
+// Exportar funciones para uso global si es necesario
+window.MainPageUtils = {
+    createPageTransition,
+    showNotification,
+    toggleMouseTracking,
+    respectsReducedMotion
+};
