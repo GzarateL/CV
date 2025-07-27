@@ -182,9 +182,7 @@ async function requestGyroPermission() {
         const permission = await DeviceOrientationEvent.requestPermission();
         if (permission === 'granted') {
             startGyroListening();
-            showNotification('¡Movimiento 3D activado!', 'success');
         } else {
-            showNotification('Permiso de movimiento no concedido. Se usará el modo estático.', 'info');
             gyroSupported = false;
         }
     } catch (error) {
