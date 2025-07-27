@@ -1,4 +1,4 @@
-// ===== SISTEMA DE MODAL PARA PROYECTOS =====
+// ===== SISTEMA DE MODAL MEJORADO CON SOPORTE PARA VIDEO =====
 
 class ProjectModal {
     constructor() {
@@ -10,6 +10,7 @@ class ProjectModal {
         this.carousel = null;
         this.touchStartX = 0;
         this.touchEndX = 0;
+        this.currentVideo = null; // Para controlar videos
         
         this.init();
     }
@@ -17,7 +18,7 @@ class ProjectModal {
     init() {
         this.createModal();
         this.setupEventListeners();
-        console.log('🎯 Modal de proyectos inicializado');
+        console.log('🎯 Modal de proyectos mejorado inicializado');
     }
     
     createModal() {
@@ -97,6 +98,12 @@ class ProjectModal {
                 case 'ArrowRight':
                     this.nextSlide();
                     break;
+                case ' ': // Espacio para pausar/reproducir video
+                    if (this.currentVideo) {
+                        e.preventDefault();
+                        this.toggleVideoPlayback();
+                    }
+                    break;
             }
         });
         
@@ -141,6 +148,12 @@ class ProjectModal {
     
     close() {
         this.isOpen = false;
+        
+        // Pausar video si está reproduciéndose
+        if (this.currentVideo) {
+            this.currentVideo.pause();
+            this.currentVideo = null;
+        }
         
         // Restaurar scroll del body
         document.body.style.overflow = '';
@@ -210,20 +223,21 @@ class ProjectModal {
         return icons[type] || icons.website;
     }
     
+    // ===== MÉTODO MEJORADO PARA CREAR SLIDES =====
     createCarouselSlides() {
-        const { images } = this.currentProject;
-        this.slides = images || [];
+        const { media } = this.currentProject;
+        this.slides = media || [];
         
         // Limpiar carrusel
         this.carousel.innerHTML = '';
         this.indicators.innerHTML = '';
         
         if (this.slides.length === 0) {
-            // Si no hay imágenes, mostrar placeholder
+            // Si no hay medios, mostrar placeholder
             this.carousel.innerHTML = `
                 <div class="carousel-slide">
                     <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);">
-                        <span>No hay imágenes disponibles</span>
+                        <span>No hay contenido multimedia disponible</span>
                     </div>
                 </div>
             `;
@@ -231,45 +245,134 @@ class ProjectModal {
         }
         
         // Crear slides
-        this.slides.forEach((image, index) => {
+        this.slides.forEach((mediaItem, index) => {
             const slide = document.createElement('div');
             slide.className = 'carousel-slide';
             
-            const img = document.createElement('img');
-            img.src = image;
-            img.alt = `${this.currentProject.title} - Imagen ${index + 1}`;
-            img.loading = 'lazy';
+            // Determinar el tipo de medio
+            const isVideo = mediaItem.type === 'video' || this.isVideoFile(mediaItem.src);
+            const src = mediaItem.src;
+            const alt = mediaItem.alt || `${this.currentProject.title} - Media ${index + 1}`;
+            const fitType = mediaItem.fit || 'contain';
+            
+            // Agregar clase de ajuste
+            slide.classList.add(`fit-${fitType}`);
             
             // Loading spinner
             const loading = document.createElement('div');
             loading.className = 'carousel-loading';
             slide.appendChild(loading);
             
-            // Manejar carga de imagen
-            img.onload = () => {
-                img.classList.add('loaded');
-                if (slide.contains(loading)) {
-                    slide.removeChild(loading);
-                }
-            };
+            // Indicador de tipo de media
+            const mediaIndicator = document.createElement('div');
+            mediaIndicator.className = `media-indicator ${isVideo ? 'video' : 'image'}`;
+            mediaIndicator.innerHTML = isVideo ? 
+                `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                </svg> Video` : 
+                `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                </svg> Imagen`;
+            slide.appendChild(mediaIndicator);
             
-            img.onerror = () => {
-                if (slide.contains(loading)) {
-                    slide.removeChild(loading);
-                }
-                slide.innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);">
-                        <span>Error al cargar imagen</span>
-                    </div>
-                `;
-            };
+            if (isVideo) {
+                const video = document.createElement('video');
+                video.src = src;
+                video.alt = alt;
+                video.muted = true; // Sin sonido como solicitaste
+                video.loop = true;
+                video.preload = 'metadata';
+                video.playsInline = true;
+                
+                // Agregar atributos adicionales para mejor compatibilidad
+                video.setAttribute('webkit-playsinline', 'true');
+                video.setAttribute('playsinline', 'true');
+                
+                // Manejar carga de video
+                video.onloadedmetadata = () => {
+                    video.classList.add('loaded');
+                    if (slide.contains(loading)) {
+                        slide.removeChild(loading);
+                    }
+                    
+                    // Auto-reproducir si es el slide actual
+                    if (index === this.currentSlide) {
+                        setTimeout(() => this.playCurrentVideo(), 100);
+                    }
+                };
+                
+                video.onerror = () => {
+                    if (slide.contains(loading)) {
+                        slide.removeChild(loading);
+                    }
+                    if (slide.contains(mediaIndicator)) {
+                        slide.removeChild(mediaIndicator);
+                    }
+                    slide.innerHTML = `
+                        <div class="media-indicator error">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            Error
+                        </div>
+                        <div class="error-message">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+                            </svg>
+                            <span>Error al cargar video</span>
+                            <small>Verifica que el archivo exista en: ${src}</small>
+                        </div>
+                    `;
+                };
+                
+                slide.appendChild(video);
+            } else {
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = alt;
+                img.loading = 'lazy';
+                
+                // Manejar carga de imagen
+                img.onload = () => {
+                    img.classList.add('loaded');
+                    if (slide.contains(loading)) {
+                        slide.removeChild(loading);
+                    }
+                };
+                
+                img.onerror = () => {
+                    if (slide.contains(loading)) {
+                        slide.removeChild(loading);
+                    }
+                    if (slide.contains(mediaIndicator)) {
+                        slide.removeChild(mediaIndicator);
+                    }
+                    slide.innerHTML = `
+                        <div class="media-indicator error">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            Error
+                        </div>
+                        <div class="error-message">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+                            </svg>
+                            <span>Error al cargar imagen</span>
+                            <small>Verifica que el archivo exista en: ${src}</small>
+                        </div>
+                    `;
+                };
+                
+                slide.appendChild(img);
+            }
             
-            slide.appendChild(img);
             this.carousel.appendChild(slide);
             
             // Crear indicador
             const indicator = document.createElement('div');
             indicator.className = `carousel-indicator ${index === 0 ? 'active' : ''}`;
+            indicator.title = isVideo ? 'Video' : 'Imagen';
             indicator.addEventListener('click', () => this.goToSlide(index));
             this.indicators.appendChild(indicator);
         });
@@ -277,6 +380,46 @@ class ProjectModal {
         // Actualizar posición inicial
         this.updateCarousel();
         this.updateNavigation();
+        
+        // Auto-reproducir video si el primer slide es un video
+        setTimeout(() => this.playCurrentVideo(), 500);
+    }
+    
+    isVideoFile(src) {
+        const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
+        return videoExtensions.some(ext => src.toLowerCase().includes(ext));
+    }
+    
+    playCurrentVideo() {
+        // Pausar video anterior
+        if (this.currentVideo) {
+            this.currentVideo.pause();
+        }
+        
+        // Encontrar y reproducir video actual
+        const currentSlideElement = this.carousel.children[this.currentSlide];
+        if (currentSlideElement) {
+            const video = currentSlideElement.querySelector('video');
+            if (video) {
+                this.currentVideo = video;
+                video.currentTime = 0; // Reiniciar desde el inicio
+                video.play().catch(e => {
+                    console.log('Error al reproducir video:', e);
+                });
+            } else {
+                this.currentVideo = null;
+            }
+        }
+    }
+    
+    toggleVideoPlayback() {
+        if (this.currentVideo) {
+            if (this.currentVideo.paused) {
+                this.currentVideo.play();
+            } else {
+                this.currentVideo.pause();
+            }
+        }
     }
     
     nextSlide() {
@@ -286,6 +429,7 @@ class ProjectModal {
         this.updateCarousel();
         this.updateIndicators();
         this.updateNavigation();
+        this.playCurrentVideo(); // Auto-reproducir video del nuevo slide
     }
     
     previousSlide() {
@@ -295,6 +439,7 @@ class ProjectModal {
         this.updateCarousel();
         this.updateIndicators();
         this.updateNavigation();
+        this.playCurrentVideo(); // Auto-reproducir video del nuevo slide
     }
     
     goToSlide(index) {
@@ -304,6 +449,7 @@ class ProjectModal {
         this.updateCarousel();
         this.updateIndicators();
         this.updateNavigation();
+        this.playCurrentVideo(); // Auto-reproducir video del nuevo slide
     }
     
     updateCarousel() {
@@ -319,7 +465,7 @@ class ProjectModal {
     }
     
     updateNavigation() {
-        // Ocultar navegación si solo hay una imagen
+        // Ocultar navegación si solo hay un elemento
         const showNav = this.slides.length > 1;
         this.prevBtn.style.display = showNav ? 'flex' : 'none';
         this.nextBtn.style.display = showNav ? 'flex' : 'none';
@@ -342,6 +488,12 @@ class ProjectModal {
     }
     
     cleanup() {
+        // Pausar video
+        if (this.currentVideo) {
+            this.currentVideo.pause();
+            this.currentVideo = null;
+        }
+        
         this.carousel.innerHTML = '';
         this.indicators.innerHTML = '';
         this.currentProject = null;
@@ -360,7 +512,7 @@ class ProjectModal {
         window.projectModalInstance.open(projectData);
     }
     
-    // Método estático para extraer datos del proyecto desde el DOM
+    // ===== ACTUALIZACIÓN DEL MÉTODO extractProjectData =====
     static extractProjectData(projectElement) {
         const title = projectElement.querySelector('.project-title').textContent;
         const description = projectElement.querySelector('.project-description').textContent;
@@ -369,20 +521,47 @@ class ProjectModal {
         const techTags = projectElement.querySelectorAll('.tech-tag');
         const technologies = Array.from(techTags).map(tag => tag.textContent);
         
-        // Extraer imágenes
-        const images = Array.from(projectElement.querySelectorAll('.project-image img'))
-            .map(img => img.src)
-            .filter(src => src && !src.includes('placeholder'));
+        // Extraer todas las imágenes y videos del HTML
+        const allImages = Array.from(projectElement.querySelectorAll('.project-image img'));
+        const allVideos = Array.from(projectElement.querySelectorAll('.project-image video'));
+        
+        const media = [];
+        
+        // Agregar imágenes
+        allImages.forEach((img, index) => {
+            if (img.src && !img.src.includes('placeholder')) {
+                media.push({
+                    src: img.src,
+                    alt: img.alt || `${title} - Imagen ${index + 1}`,
+                    fit: img.dataset.fit || 'contain',
+                    type: 'image'
+                });
+            }
+        });
+        
+        // Agregar videos
+        allVideos.forEach((video, index) => {
+            const source = video.querySelector('source');
+            const videoSrc = video.dataset.src || (source ? source.src : video.src);
+            
+            if (videoSrc) {
+                media.push({
+                    src: videoSrc,
+                    alt: video.alt || `${title} - Video ${index + 1}`,
+                    fit: video.dataset.fit || 'contain',
+                    type: 'video'
+                });
+            }
+        });
         
         // Enlaces de ejemplo (puedes personalizar según tus necesidades)
-        const links = [
-        ];
+        const links = [];
         
         return {
             title,
             description,
             technologies,
-            images,
+            media, // Ahora incluye tanto imágenes como videos del HTML
             links
         };
     }
@@ -428,7 +607,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    console.log('✅ Sistema de modal de proyectos inicializado');
+    console.log('✅ Sistema de modal de proyectos mejorado inicializado');
 });
 
 // Exportar para uso global

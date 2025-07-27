@@ -56,11 +56,11 @@
                 <!-- Proyecto 1: ALTOKE -->
                 <div class="project-card" data-category="fullstack">
                     <div class="project-image">
-                        <img src="assets/images/projects/altoke/1.jpg" alt="ALTOKE - Sistema de Gestión">
-                        <img src="assets/images/projects/altoke/2.jpg" alt="ALTOKE - Dashboard" style="display: none;">
-                        <img src="assets/images/projects/altoke/3.jpg" alt="ALTOKE - Dashboard" style="display: none;">
-                        <img src="assets/images/projects/altoke/4.jpg" alt="ALTOKE - Dashboard" style="display: none;">
-                        <img src="assets/images/projects/altoke/5.jpg" alt="ALTOKE - Dashboard" style="display: none;">
+                        <img src="assets/images/projects/altoke/1.jpg" alt="ALTOKE - Sistema de Gestión" data-fit="contain">
+                        <img src="assets/images/projects/altoke/2.jpg" alt="ALTOKE - Dashboard" style="display: none;" data-fit="contain">
+                        <img src="assets/images/projects/altoke/3.jpg" alt="ALTOKE - Dashboard" style="display: none;" data-fit="contain">
+                        <img src="assets/images/projects/altoke/4.jpg" alt="ALTOKE - Dashboard" style="display: none;" data-fit="contain">
+                        <img src="assets/images/projects/altoke/5.jpg" alt="ALTOKE - Dashboard" style="display: none;" data-fit="contain">
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">ALTOKE</h3>
@@ -74,10 +74,19 @@
                     </div>
                 </div>
 
-                <!-- Proyecto 2: NAVEPE -->
+                <!-- Proyecto 2: NAVEPE (CORREGIDO PARA VIDEO) -->
                 <div class="project-card" data-category="mobile">
                     <div class="project-image">
-                        <img src="assets/images/projects/navepe/1.png" alt="NAVEPE - App de Seguridad">
+                        <!-- Imagen principal visible -->
+                        <img src="assets/images/projects/navepe/1.png" alt="NAVEPE - App de Seguridad" data-fit="contain">
+                        <!-- Video oculto para el modal (será detectado automáticamente) -->
+                        <video style="display: none;" data-src="assets/videos/1.mp4" data-fit="contain" muted loop>
+                            <source src="assets/videos/1.mp4" type="video/mp4">
+                            Tu navegador no soporta videos.
+                        </video>
+                        <!-- Imágenes adicionales ocultas (si las tienes) -->
+                        <!-- <img src="assets/images/projects/navepe/2.png" alt="NAVEPE - Dashboard" style="display: none;" data-fit="contain"> -->
+                        <!-- <img src="assets/images/projects/navepe/3.png" alt="NAVEPE - Configuración" style="display: none;" data-fit="contain"> -->
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">NAVEPE</h3>
@@ -95,8 +104,8 @@
                 <!-- Proyecto 3: DOT'S GO -->
                 <div class="project-card" data-category="web design">
                     <div class="project-image">
-                        <img src="assets/images/projects/dots/1.png" alt="DOT'S GO - Plataforma Educativa">
-                        <img src="assets/images/projects/dots/2.png" alt="DOT'S GO - Plataforma Educativa">
+                        <img src="assets/images/projects/dots/1.png" alt="DOT'S GO - Plataforma Educativa" data-fit="cover">
+                        <img src="assets/images/projects/dots/2.png" alt="DOT'S GO - Dashboard" style="display: none;" data-fit="cover">
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">DOT'S GO!!!</h3>
@@ -113,10 +122,10 @@
                 <!-- Proyecto 4: EL PATRÓN -->
                 <div class="project-card" data-category="web design">
                     <div class="project-image">
-                        <img src="assets/images/projects/patron/1.png" alt="El Patrón - Sitio Web">
-                        <img src="assets/images/projects/patron/2.png" alt="El Patrón - Sitio Web">
-                        <img src="assets/images/projects/patron/3.png" alt="El Patrón - Sitio Web">
-                        <img src="assets/images/projects/patron/4.png" alt="El Patrón - Sitio Web">
+                        <img src="assets/images/projects/patron/1.png" alt="El Patrón - Hero Section" data-fit="cover">
+                        <img src="assets/images/projects/patron/2.png" alt="El Patrón - Menu" style="display: none;" data-fit="cover">
+                        <img src="assets/images/projects/patron/3.png" alt="El Patrón - Galería" style="display: none;" data-fit="cover">
+                        <img src="assets/images/projects/patron/4.png" alt="El Patrón - Contacto" style="display: none;" data-fit="cover">
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">EL PATRÓN</h3>
@@ -134,8 +143,8 @@
                 <!-- Proyecto 5: CODELINK -->
                 <div class="project-card" data-category="mobile">
                     <div class="project-image">
-                        <img src="assets/images/projects/codelink/1.png" alt="CodeLink - Red Social">
-                        <img src="assets/images/projects/codelink/2.png" alt="CodeLink - Red Social">
+                        <img src="assets/images/projects/codelink/1.png" alt="CodeLink - Red Social" data-fit="contain">
+                        <img src="assets/images/projects/codelink/2.png" alt="CodeLink - Dashboard" style="display: none;" data-fit="contain">
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">CODELINK</h3>
@@ -148,6 +157,26 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- EJEMPLO: Si quieres agregar más proyectos con video -->
+                <!--
+                <div class="project-card" data-category="fullstack">
+                    <div class="project-image">
+                        <img src="assets/images/projects/mi-proyecto/preview.jpg" alt="Mi Proyecto" data-fit="cover">
+                        <video style="display: none;" data-src="assets/videos/mi-proyecto-demo.mp4" data-fit="contain" muted loop>
+                            <source src="assets/videos/mi-proyecto-demo.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">MI PROYECTO</h3>
+                        <p class="project-description">Descripción del proyecto...</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">Node.js</span>
+                        </div>
+                    </div>
+                </div>
+                -->
 
             </div>
         </div>
