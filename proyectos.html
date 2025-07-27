@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/universe-background.css">
     <link rel="stylesheet" href="css/loading-screen.css">
     <link rel="stylesheet" href="css/projects-section.css">
+    <link rel="stylesheet" href="css/project-modal.css">
 </head>
 <body>
     <!-- Contenedor del universo de fondo -->
@@ -52,92 +53,54 @@
             
             <!-- Grid de proyectos -->
             <div class="projects-grid">
-                <!-- Proyecto 1 -->
+                <!-- Proyecto 1: ALTOKE -->
                 <div class="project-card" data-category="fullstack">
                     <div class="project-image">
-                        <img src="assets/images/projects/altoke/1.jpg" alt="E-Commerce Platform" loading="lazy">
-                        <img src="assets/images/projects/altoke/2.jpg" alt="E-Commerce Platform" loading="lazy">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="#" class="project-link" title="Ver demo">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="project-link" title="Ver código">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
+                        <img src="assets/images/projects/altoke/1.jpg" alt="ALTOKE - Sistema de Gestión">
+                        <img src="assets/images/projects/altoke/2.jpg" alt="ALTOKE - Dashboard" style="display: none;">
+                        <img src="assets/images/projects/altoke/3.jpg" alt="ALTOKE - Dashboard" style="display: none;">
+                        <img src="assets/images/projects/altoke/4.jpg" alt="ALTOKE - Dashboard" style="display: none;">
+                        <img src="assets/images/projects/altoke/5.jpg" alt="ALTOKE - Dashboard" style="display: none;">
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">ALTOKE</h3>
-                        <p class="project-description">Sistema de Gestion de Pedidos Para Restaurantes </p>
+                        <p class="project-description">Sistema de Gestión de Pedidos Para Restaurantes con dashboard administrativo y aplicación móvil para pedidos en tiempo real.</p>
                         <div class="project-tech">
                             <span class="tech-tag">Next.js</span>
                             <span class="tech-tag">Flutter</span>
                             <span class="tech-tag">TypeScript</span>
-                            <span class="tech-tag">PostGreSQL</span>
+                            <span class="tech-tag">PostgreSQL</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Proyecto 2 -->
+                <!-- Proyecto 2: NAVEPE -->
                 <div class="project-card" data-category="mobile">
                     <div class="project-image">
-                        <img src="assets/images/projects/navepe/1.png" alt="Fitness Tracker App" loading="lazy">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="#" class="project-link" title="Ver demo">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="project-link" title="Ver código">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
+                        <img src="assets/images/projects/navepe/1.png" alt="NAVEPE - App de Seguridad">
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">NAVEPE</h3>
-                        <p class="project-description">Aplicación móvil y web para monitorear la seguridad de un vehiculo a traves de un dispositivo creado llamado Navepe</p>
+                        <p class="project-description">Aplicación móvil y web para monitorear la seguridad de un vehículo a través de un dispositivo IoT personalizado llamado Navepe.</p>
                         <div class="project-tech">
                             <span class="tech-tag">React</span>
                             <span class="tech-tag">Arduino IDE</span>
-                            <span class="tech-tag">FireBase</span>
+                            <span class="tech-tag">Firebase</span>
                             <span class="tech-tag">Kotlin</span>
-                            <span class="tech-tag">Innovación</span>
+                            <span class="tech-tag">IoT</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Proyecto 3 -->
+                <!-- Proyecto 3: DOT'S GO -->
                 <div class="project-card" data-category="web design">
                     <div class="project-image">
-                        <img src="assets/images/projects/dots/1.png" alt="Portfolio Website" loading="lazy">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="#" class="project-link" title="Ver demo">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="project-link" title="Ver código">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
+                        <img src="assets/images/projects/dots/1.png" alt="DOT'S GO - Plataforma Educativa">
+                        <img src="assets/images/projects/dots/2.png" alt="DOT'S GO - Plataforma Educativa">
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">DOT'S GO!!!</h3>
-                        <p class="project-description">Esta es un plataforma sobre preguntas del Sistema Dots en el campo de Seguridad Industrial</p>
+                        <p class="project-description">Plataforma web interactiva sobre preguntas del Sistema DOTS en el campo de Seguridad Industrial.</p>
                         <div class="project-tech">
                             <span class="tech-tag">Node.js</span>
                             <span class="tech-tag">MongoDB</span>
@@ -147,71 +110,53 @@
                     </div>
                 </div>
 
-                <!-- Proyecto 4 -->
-                <div class="project-card" data-category="fullstack">
+                <!-- Proyecto 4: EL PATRÓN -->
+                <div class="project-card" data-category="web design">
                     <div class="project-image">
-                        <img src="assets/images/projects/patron/1.png" alt="Task Management System" loading="lazy">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="#" class="project-link" title="Ver demo">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="project-link" title="Ver código">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
+                        <img src="assets/images/projects/patron/1.png" alt="El Patrón - Sitio Web">
+                        <img src="assets/images/projects/patron/2.png" alt="El Patrón - Sitio Web">
+                        <img src="assets/images/projects/patron/3.png" alt="El Patrón - Sitio Web">
+                        <img src="assets/images/projects/patron/4.png" alt="El Patrón - Sitio Web">
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">EL PATRÓN</h3>
-                        <p class="project-description">Pagina web estatica del Restobar El Patrón ubicado en Moquegua Perú, Actualmente la página se encuentra en mantenimiento</p>
+                        <p class="project-description">Página web completa del Restobar El Patrón ubicado en Moquegua Perú, con diseño responsivo y gestión de contenido.</p>
                         <div class="project-tech">
-                            <span class="tech-tag">HTML</span>
-                            <span class="tech-tag">CSS</span>
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">CSS3</span>
                             <span class="tech-tag">JavaScript</span>
                             <span class="tech-tag">WordPress</span>
-                            <span class="tech-tag">GoDaddy</span>
                             <span class="tech-tag">Figma</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Proyecto 5 -->
+                <!-- Proyecto 5: CODELINK -->
                 <div class="project-card" data-category="mobile">
                     <div class="project-image">
-                        <img src="assets/images/projects/codelink/1.png" alt="Weather App" loading="lazy">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="#" class="project-link" title="Ver demo">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="project-link" title="Ver código">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
+                        <img src="assets/images/projects/codelink/1.png" alt="CodeLink - Red Social">
+                        <img src="assets/images/projects/codelink/2.png" alt="CodeLink - Red Social">
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">CODELINK</h3>
-                        <p class="project-description">Una Red Social perfilada a personas que les guste el mundo de la Tecnología, Programación. etc</p>
+                        <p class="project-description">Red Social especializada para personas del mundo de la Tecnología y Programación con funciones de networking y colaboración.</p>
                         <div class="project-tech">
                             <span class="tech-tag">Swift</span>
-                            <span class="tech-tag">XCode</span>
+                            <span class="tech-tag">Xcode</span>
                             <span class="tech-tag">Firebase</span>
+                            <span class="tech-tag">iOS</span>
                         </div>
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="js/loading-screen.js"></script>
     <script src="js/universe-background.js"></script>
+    <script src="js/project-modal.js"></script>
     <script src="js/proyectos.js"></script>
 </body>
 </html>
