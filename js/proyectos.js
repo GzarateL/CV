@@ -8,10 +8,10 @@ class ProjectsUniverseBackground {
         this.mouseX = 0;
         this.mouseY = 0;
         this.isInitialized = false;
-        
+
         this.init();
     }
-    
+
     init() {
         this.createContainer();
         this.generateStars();
@@ -22,7 +22,7 @@ class ProjectsUniverseBackground {
         this.isInitialized = true;
         console.log('🌌 Universo de proyectos inicializado');
     }
-    
+
     createContainer() {
         this.container = document.createElement('div');
         this.container.className = 'projects-universe-container';
@@ -31,31 +31,31 @@ class ProjectsUniverseBackground {
             <div class="projects-stars-layer layer-2"></div>
             <div class="projects-stars-layer layer-3"></div>
         `;
-        
+
         // Insertar en la sección de proyectos
         const projectsSection = document.querySelector('.projects-section');
         if (projectsSection) {
             projectsSection.insertBefore(this.container, projectsSection.firstChild);
         }
     }
-    
+
     generateStars() {
         const layers = this.container.querySelectorAll('.projects-stars-layer');
         const starCounts = [70, 50, 35]; // Cantidades optimizadas para proyectos
         const starSizes = ['small', 'medium', 'large'];
-        
+
         layers.forEach((layer, layerIndex) => {
             for (let i = 0; i < starCounts[layerIndex]; i++) {
                 const star = document.createElement('div');
                 star.className = `projects-star ${starSizes[Math.floor(Math.random() * starSizes.length)]}`;
-                
+
                 // Posición aleatoria
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                
+
                 // Delay aleatorio para la animación
                 star.style.animationDelay = Math.random() * 3 + 's';
-                
+
                 layer.appendChild(star);
                 this.stars.push({
                     element: star,
@@ -66,23 +66,23 @@ class ProjectsUniverseBackground {
             }
         });
     }
-    
+
     generateAsteroids() {
         const layer = this.container.querySelector('.projects-stars-layer.layer-2');
         const asteroidCount = 10;
         const asteroidSizes = ['small', 'medium', 'large'];
-        
+
         for (let i = 0; i < asteroidCount; i++) {
             const asteroid = document.createElement('div');
             asteroid.className = `projects-asteroid ${asteroidSizes[Math.floor(Math.random() * asteroidSizes.length)]}`;
-            
+
             // Posición aleatoria
             asteroid.style.left = Math.random() * 100 + '%';
             asteroid.style.top = Math.random() * 100 + '%';
-            
+
             // Delay aleatorio para la animación
             asteroid.style.animationDelay = Math.random() * 8 + 's';
-            
+
             layer.appendChild(asteroid);
             this.asteroids.push({
                 element: asteroid,
@@ -92,53 +92,53 @@ class ProjectsUniverseBackground {
             });
         }
     }
-    
+
     createNebulas() {
         const nebulas = [
             { class: 'projects-nebula projects-nebula-1' },
             { class: 'projects-nebula projects-nebula-2' },
             { class: 'projects-nebula projects-nebula-3' }
         ];
-        
+
         nebulas.forEach(nebulaConfig => {
             const nebula = document.createElement('div');
             nebula.className = nebulaConfig.class;
             this.container.appendChild(nebula);
         });
     }
-    
+
     setupMouseTracking() {
         document.addEventListener('mousemove', (e) => {
             this.mouseX = (e.clientX / window.innerWidth) * 2 - 1;
             this.mouseY = (e.clientY / window.innerHeight) * 2 - 1;
         });
     }
-    
+
     startAnimation() {
         this.animate();
     }
-    
+
     animate() {
         // Animar estrellas con parallax sutil
         this.stars.forEach(star => {
             const parallaxStrength = star.layer * 0.3;
             const moveX = this.mouseX * parallaxStrength;
             const moveY = this.mouseY * parallaxStrength;
-            
+
             star.element.style.transform = `translate(${moveX}px, ${moveY}px)`;
         });
-        
+
         // Animar asteroides
         this.asteroids.forEach(asteroid => {
             const moveX = this.mouseX * asteroid.speed * 1.5;
             const moveY = this.mouseY * asteroid.speed * 1.5;
-            
+
             asteroid.element.style.transform = `translate(${moveX}px, ${moveY}px)`;
         });
-        
+
         requestAnimationFrame(() => this.animate());
     }
-    
+
     destroy() {
         if (this.container && this.container.parentNode) {
             this.container.parentNode.removeChild(this.container);
@@ -146,27 +146,25 @@ class ProjectsUniverseBackground {
         this.isInitialized = false;
         console.log('🌌 Universo de proyectos destruido');
     }
-    
+
     toggleMobileOptimization() {
         const isMobile = window.innerWidth <= 768;
-        
+
         if (isMobile) {
+            // Hide some stars and asteroids for performance on mobile
             this.stars.forEach((star, index) => {
-                if (index % 2 === 0) {
-                    star.element.style.display = 'none';
-                }
+                star.element.style.display = (index % 2 === 0) ? 'none' : 'block';
             });
-            
+
             this.asteroids.forEach((asteroid, index) => {
-                if (index % 3 === 0) {
-                    asteroid.element.style.display = 'none';
-                }
+                asteroid.element.style.display = (index % 3 === 0) ? 'none' : 'block';
             });
         } else {
+            // Show all for desktop
             this.stars.forEach(star => {
                 star.element.style.display = 'block';
             });
-            
+
             this.asteroids.forEach(asteroid => {
                 asteroid.element.style.display = 'block';
             });
@@ -183,7 +181,8 @@ class ProjectsPage {
         this.universeBackground = null;
         this.currentFilter = 'all';
         this.isFilterAnimating = false;
-        
+        this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0; // Detect touch devices
+
         this.translations = {
             es: {
                 title: "PROYECTOS",
@@ -208,82 +207,93 @@ class ProjectsPage {
                 }
             }
         };
-        
+
         this.init();
     }
-    
+
     init() {
         this.initializeUniverse();
         this.setupEventListeners();
         this.initializeProjectCards();
         this.setupAnimations();
         this.setupIntersectionObserver();
+        this.toggleMobileOptimizedCardEffects(); // Apply initial optimization
     }
-    
+
     // INICIALIZAR EL FONDO DEL UNIVERSO COMPLETO
     initializeUniverse() {
         setTimeout(() => {
             this.universeBackground = new ProjectsUniverseBackground();
+            // Call mobile optimization immediately after universe initialization
+            this.universeBackground.toggleMobileOptimization();
             console.log('🌌 Universo de proyectos inicializado completamente');
         }, 300);
     }
-    
+
     setupEventListeners() {
         // Control de audio
         const audioBtn = document.getElementById('audioBtn');
         if (audioBtn) {
             audioBtn.addEventListener('click', () => this.toggleAudio());
         }
-        
+
         // Control de idioma
         const langBtn = document.getElementById('langBtn');
         if (langBtn) {
             langBtn.addEventListener('click', () => this.toggleLanguage());
         }
-        
+
         // Botón de regreso
         const backButton = document.getElementById('backToMain');
         if (backButton) {
             backButton.addEventListener('click', () => this.goBack());
         }
-        
+
         // Tecla ESC para regresar
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && !document.querySelector('.project-modal.active')) {
                 this.goBack();
             }
         });
-        
+
         // Filtros de proyectos
         this.setupFilterButtons();
-        
+
         // Efectos de hover en las tarjetas (SIN CLICK - eso lo maneja el modal)
         this.setupCardEffects();
+
+        // Listen for resize to re-apply mobile optimizations
+        window.addEventListener('resize', () => {
+            this.toggleMobileOptimizedCardEffects();
+            if (this.universeBackground) {
+                this.universeBackground.toggleMobileOptimization();
+            }
+        });
     }
-    
+
     setupFilterButtons() {
         const filterButtons = document.querySelectorAll('.filter-btn');
-        
+
         filterButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 if (this.isFilterAnimating) return;
-                
+
                 const category = e.target.dataset.category;
                 this.filterProjects(category);
-                
+
                 // Actualizar botón activo
                 filterButtons.forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
-                
+
                 this.currentFilter = category;
             });
         });
     }
-    
+
     toggleAudio() {
         const audioBtn = document.getElementById('audioBtn');
         const audioIcon = document.getElementById('audioIcon');
-        
+
         if (this.isAudioPlaying) {
             this.backgroundMusic.pause();
             audioBtn.classList.add('muted');
@@ -298,10 +308,10 @@ class ProjectsPage {
             this.isAudioPlaying = true;
         }
     }
-    
+
     toggleLanguage() {
         const langText = document.getElementById('langText');
-        
+
         if (this.currentLang === 'es') {
             this.currentLang = 'en';
             langText.textContent = 'EN';
@@ -309,20 +319,20 @@ class ProjectsPage {
             this.currentLang = 'es';
             langText.textContent = 'ES';
         }
-        
+
         this.updateTexts();
     }
-    
+
     updateTexts() {
         const texts = this.translations[this.currentLang];
-        
+
         // Actualizar título y subtítulo
         const title = document.querySelector('.projects-title');
         const subtitle = document.querySelector('.projects-subtitle');
-        
+
         if (title) title.textContent = texts.title;
         if (subtitle) subtitle.textContent = texts.subtitle;
-        
+
         // Actualizar filtros
         const filterButtons = document.querySelectorAll('.filter-btn');
         filterButtons.forEach(btn => {
@@ -332,37 +342,65 @@ class ProjectsPage {
             }
         });
     }
-    
+
     initializeProjectCards() {
         this.projectCards = document.querySelectorAll('.project-card');
-        
+
         // Agregar delay de animación escalonada
         this.projectCards.forEach((card, index) => {
             card.style.animationDelay = `${index * 0.1}s`;
         });
     }
-    
+
     setupCardEffects() {
-        this.projectCards.forEach(card => {
-            card.addEventListener('mouseenter', (e) => this.onCardHover(e, true));
-            card.addEventListener('mouseleave', (e) => this.onCardHover(e, false));
-            // El click ahora lo maneja el modal
-        });
+        // Only attach hover effects if it's not a touch device
+        if (!this.isTouchDevice) {
+            this.projectCards.forEach(card => {
+                card.addEventListener('mouseenter', (e) => this.onCardHover(e, true));
+                card.addEventListener('mouseleave', (e) => this.onCardHover(e, false));
+            });
+        }
     }
-    
+
+    // New method to toggle hover effects based on device type
+    toggleMobileOptimizedCardEffects() {
+        const cards = document.querySelectorAll('.project-card');
+        if (this.isTouchDevice || window.innerWidth <= 768) {
+            cards.forEach(card => {
+                card.removeEventListener('mouseenter', (e) => this.onCardHover(e, true));
+                card.removeEventListener('mouseleave', (e) => this.onCardHover(e, false));
+                // Ensure no lingering hover styles from CSS if applicable
+                card.style.transition = 'all 0.2s ease'; // Quicker transitions for mobile
+                card.style.boxShadow = 'none'; // Remove persistent shadow
+            });
+        } else {
+            // Re-add effects for desktop
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', (e) => this.onCardHover(e, true));
+                card.addEventListener('mouseleave', (e) => this.onCardHover(e, false));
+                card.style.transition = 'all 0.6s ease'; // Original desktop transition
+            });
+        }
+    }
+
     onCardHover(event, isEntering) {
         const card = event.currentTarget;
-        
+
+        // Prevent hover effects on touch devices
+        if (this.isTouchDevice || window.innerWidth <= 768) {
+            return;
+        }
+
         if (isEntering) {
             this.createHoverParticles(card);
             this.addRippleEffect(card, event);
         }
     }
-    
+
     createHoverParticles(card) {
         const rect = card.getBoundingClientRect();
         const particleCount = 6;
-        
+
         for (let i = 0; i < particleCount; i++) {
             const particle = document.createElement('div');
             particle.style.cssText = `
@@ -373,26 +411,26 @@ class ProjectsPage {
                 border-radius: 50%;
                 pointer-events: none;
                 z-index: 1000;
-                left: ${rect.left + rect.width/2}px;
-                top: ${rect.top + rect.height/2}px;
+                left: ${rect.left + rect.width / 2}px;
+                top: ${rect.top + rect.height / 2}px;
                 opacity: 1;
                 transform: translate(-50%, -50%);
             `;
-            
+
             document.body.appendChild(particle);
-            
+
             // Animar partícula
             const angle = (Math.PI * 2 * i) / particleCount;
             const distance = 30 + Math.random() * 20;
             const duration = 800 + Math.random() * 400;
-            
+
             particle.animate([
                 {
                     transform: 'translate(-50%, -50%) scale(1)',
                     opacity: 1
                 },
                 {
-                    transform: `translate(${-50 + Math.cos(angle) * distance}%, ${-50 + Math.sin(angle) * distance}%) scale(0)`,
+                    transform: `translate(${-50 + Math.cos(angle) * distance}px, ${-50 + Math.sin(angle) * distance}px) scale(0)`,
                     opacity: 0
                 }
             ], {
@@ -405,15 +443,15 @@ class ProjectsPage {
             };
         }
     }
-    
+
     addRippleEffect(card, event) {
         const rect = card.getBoundingClientRect();
         const ripple = document.createElement('div');
-        
+
         const size = Math.max(rect.width, rect.height) * 1.5;
         const x = event.clientX - rect.left - size / 2;
         const y = event.clientY - rect.top - size / 2;
-        
+
         ripple.style.cssText = `
             position: absolute;
             width: ${size}px;
@@ -426,9 +464,9 @@ class ProjectsPage {
             pointer-events: none;
             z-index: 0;
         `;
-        
+
         card.appendChild(ripple);
-        
+
         ripple.animate([
             { transform: 'scale(0)', opacity: 1 },
             { transform: 'scale(1)', opacity: 0 }
@@ -441,7 +479,7 @@ class ProjectsPage {
             }
         };
     }
-    
+
     setupAnimations() {
         // Animación de entrada para las tarjetas con Intersection Observer
         const observer = new IntersectionObserver((entries) => {
@@ -454,43 +492,48 @@ class ProjectsPage {
             threshold: 0.1,
             rootMargin: '50px'
         });
-        
+
         // Observar todas las tarjetas
         this.projectCards.forEach(card => {
             observer.observe(card);
         });
     }
-    
+
     setupIntersectionObserver() {
         // Observer adicional para efectos avanzados
         const advancedObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Efecto de brillo gradual
-                    entry.target.style.transition = 'all 0.6s ease';
-                    entry.target.style.boxShadow = '0 0 30px rgba(168, 85, 247, 0.1)';
+                // Apply subtle shadow only on non-touch devices or larger screens
+                if (!this.isTouchDevice && window.innerWidth > 768) {
+                    if (entry.isIntersecting) {
+                        entry.target.style.transition = 'all 0.6s ease';
+                        entry.target.style.boxShadow = '0 0 30px rgba(168, 85, 247, 0.1)';
+                    } else {
+                        entry.target.style.boxShadow = 'none';
+                    }
                 } else {
+                    // Ensure no shadow on mobile
                     entry.target.style.boxShadow = 'none';
                 }
             });
         }, {
             threshold: 0.3
         });
-        
+
         this.projectCards.forEach(card => {
             advancedObserver.observe(card);
         });
     }
-    
+
     filterProjects(category) {
         if (this.isFilterAnimating) return;
-        
+
         this.isFilterAnimating = true;
-        
+
         this.projectCards.forEach((card, index) => {
             const cardCategories = card.dataset.category.split(' ');
             const shouldShow = category === 'all' || cardCategories.includes(category);
-            
+
             // Delay escalonado para la animación
             setTimeout(() => {
                 if (shouldShow) {
@@ -500,7 +543,7 @@ class ProjectsPage {
                 } else {
                     card.classList.remove('filtered-in');
                     card.classList.add('filtered-out');
-                    
+
                     // Ocultar después de la animación
                     setTimeout(() => {
                         if (card.classList.contains('filtered-out')) {
@@ -508,7 +551,7 @@ class ProjectsPage {
                         }
                     }, 400);
                 }
-                
+
                 // Liberar el flag de animación después del último elemento
                 if (index === this.projectCards.length - 1) {
                     setTimeout(() => {
@@ -517,15 +560,15 @@ class ProjectsPage {
                 }
             }, index * 50);
         });
-        
+
         // Crear efecto de onda en el filtro seleccionado
         this.createFilterWaveEffect(category);
     }
-    
+
     createFilterWaveEffect(category) {
         const activeBtn = document.querySelector(`.filter-btn[data-category="${category}"]`);
         if (!activeBtn) return;
-        
+
         const wave = document.createElement('div');
         wave.style.cssText = `
             position: absolute;
@@ -539,10 +582,10 @@ class ProjectsPage {
             pointer-events: none;
             z-index: -1;
         `;
-        
+
         activeBtn.style.position = 'relative';
         activeBtn.appendChild(wave);
-        
+
         wave.animate([
             { width: '0px', height: '0px', opacity: 0.8 },
             { width: '100px', height: '100px', opacity: 0 }
@@ -555,34 +598,34 @@ class ProjectsPage {
             }
         };
     }
-    
+
     goBack() {
         // Limpiar el universo antes de salir
         if (this.universeBackground && this.universeBackground.destroy) {
             this.universeBackground.destroy();
         }
-        
+
         // Efecto de salida antes de redirigir
         const projectsSection = document.getElementById('projectsSection');
         if (projectsSection) {
             projectsSection.style.transform = 'scale(0.95)';
             projectsSection.style.opacity = '0';
         }
-        
+
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 300);
     }
-    
+
     // Método para agregar un nuevo proyecto dinámicamente
     addProject(projectData) {
         const grid = document.querySelector('.projects-grid');
         if (!grid) return;
-        
+
         const projectCard = document.createElement('div');
         projectCard.className = 'project-card';
         projectCard.dataset.category = projectData.category;
-        
+
         projectCard.innerHTML = `
             <div class="project-image">
                 <img src="${projectData.image}" alt="${projectData.title}" loading="lazy">
@@ -595,40 +638,42 @@ class ProjectsPage {
                 </div>
             </div>
         `;
-        
+
         grid.appendChild(projectCard);
-        
-        // Agregar efectos al nuevo elemento
-        projectCard.addEventListener('mouseenter', (e) => this.onCardHover(e, true));
-        projectCard.addEventListener('mouseleave', (e) => this.onCardHover(e, false));
-        
+
+        // Agregar efectos al nuevo elemento, but only if not touch
+        if (!this.isTouchDevice) {
+            projectCard.addEventListener('mouseenter', (e) => this.onCardHover(e, true));
+            projectCard.addEventListener('mouseleave', (e) => this.onCardHover(e, false));
+        }
+
         // Animación de entrada
         projectCard.style.opacity = '0';
         projectCard.style.transform = 'translateY(30px) scale(0.9)';
-        
+
         setTimeout(() => {
             projectCard.style.transition = 'all 0.8s ease-out';
             projectCard.classList.add('visible');
         }, 100);
-        
+
         // Actualizar la lista de tarjetas
         this.projectCards = document.querySelectorAll('.project-card');
     }
-    
+
     // Método para búsqueda de proyectos
     searchProjects(searchTerm) {
         const term = searchTerm.toLowerCase();
-        
+
         this.projectCards.forEach(card => {
             const title = card.querySelector('.project-title').textContent.toLowerCase();
             const description = card.querySelector('.project-description').textContent.toLowerCase();
             const technologies = Array.from(card.querySelectorAll('.tech-tag'))
                 .map(tag => tag.textContent.toLowerCase()).join(' ');
-            
-            const matches = title.includes(term) || 
-                          description.includes(term) || 
-                          technologies.includes(term);
-            
+
+            const matches = title.includes(term) ||
+                description.includes(term) ||
+                technologies.includes(term);
+
             if (matches) {
                 card.classList.remove('filtered-out');
                 card.classList.add('filtered-in');
@@ -644,7 +689,7 @@ class ProjectsPage {
             }
         });
     }
-    
+
     // Método para mostrar todos los proyectos
     showAllProjects() {
         this.projectCards.forEach(card => {
@@ -652,7 +697,7 @@ class ProjectsPage {
             card.classList.add('filtered-in');
             card.style.display = 'block';
         });
-        
+
         // Resetear filtro activo
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.classList.remove('active');
@@ -660,7 +705,7 @@ class ProjectsPage {
         document.querySelector('.filter-btn[data-category="all"]').classList.add('active');
         this.currentFilter = 'all';
     }
-    
+
     // Método para obtener estadísticas de proyectos
     getProjectStats() {
         const stats = {
@@ -668,23 +713,23 @@ class ProjectsPage {
             byCategory: {},
             technologies: {}
         };
-        
+
         this.projectCards.forEach(card => {
             const categories = card.dataset.category.split(' ');
             const techTags = card.querySelectorAll('.tech-tag');
-            
+
             // Contar por categoría
             categories.forEach(category => {
                 stats.byCategory[category] = (stats.byCategory[category] || 0) + 1;
             });
-            
+
             // Contar tecnologías
             techTags.forEach(tag => {
                 const tech = tag.textContent;
                 stats.technologies[tech] = (stats.technologies[tech] || 0) + 1;
             });
         });
-        
+
         return stats;
     }
 }
@@ -692,7 +737,7 @@ class ProjectsPage {
 // Inicialización cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Iniciando página de proyectos con universo completo...');
-    
+
     // Esperar un poco para que los elementos se rendericen
     setTimeout(() => {
         window.projectsPageInstance = new ProjectsPage();
@@ -707,42 +752,36 @@ window.addEventListener('beforeunload', function() {
     }
 });
 
-// Optimización para dispositivos móviles
-window.addEventListener('resize', function() {
-    // Reducir efectos en pantallas pequeñas para mejor rendimiento
-    if (window.innerWidth <= 768 && window.projectsPageInstance) {
-        const cards = document.querySelectorAll('.project-card');
-        cards.forEach(card => {
-            card.style.transition = 'all 0.2s ease';
-        });
-        
-        // Optimizar universo en móviles
-        if (window.projectsPageInstance.universeBackground) {
-            window.projectsPageInstance.universeBackground.toggleMobileOptimization();
-        }
-    }
-});
-
-// Prevenir scroll horizontal en móviles
+// Optimización para dispositivos móviles y prevenir scroll horizontal
 document.addEventListener('touchmove', function(e) {
+    // Only apply this logic on mobile to prevent horizontal scroll if it's the main scroll
     if (window.innerWidth <= 768) {
-        const target = e.target.closest('.projects-section');
-        if (target) {
-            // Permitir scroll vertical pero controlar el horizontal
-            const startY = e.touches[0].clientY;
-            const startX = e.touches[0].clientX;
-            
-            document.addEventListener('touchmove', function(moveEvent) {
+        const startY = e.touches[0].clientY;
+        const startX = e.touches[0].clientX;
+
+        // Use a flag to avoid adding multiple listeners
+        if (!e.target.dataset.hasMoveListener) {
+            e.target.dataset.hasMoveListener = 'true';
+            e.target.addEventListener('touchmove', function handler(moveEvent) {
                 const deltaY = Math.abs(moveEvent.touches[0].clientY - startY);
                 const deltaX = Math.abs(moveEvent.touches[0].clientX - startX);
-                
-                if (deltaX > deltaY) {
+
+                // Prevent default only if horizontal movement is significantly greater than vertical
+                if (deltaX > deltaY + 5) { // Added a small threshold
                     moveEvent.preventDefault();
                 }
             }, { passive: false });
+
+            // Remove the temporary listener after touch ends
+            e.target.addEventListener('touchend', function clearListener() {
+                e.target.removeEventListener('touchmove', handler);
+                e.target.removeEventListener('touchend', clearListener);
+                delete e.target.dataset.hasMoveListener;
+            });
         }
     }
-});
+}, { passive: false }); // Ensure passive is false for preventDefault to work
+
 
 // Pausar animaciones cuando la pestaña no está visible
 document.addEventListener('visibilitychange', function() {
@@ -766,14 +805,14 @@ window.ProjectsUtils = {
             window.projectsPageInstance.addProject(projectData);
         }
     },
-    
+
     // Función para buscar proyectos
     searchProjects: function(term) {
         if (window.projectsPageInstance) {
             window.projectsPageInstance.searchProjects(term);
         }
     },
-    
+
     // Función para obtener estadísticas
     getStats: function() {
         if (window.projectsPageInstance) {
@@ -781,7 +820,7 @@ window.ProjectsUtils = {
         }
         return null;
     },
-    
+
     // Función para filtrar por categoría
     filterByCategory: function(category) {
         if (window.projectsPageInstance) {
@@ -810,7 +849,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
-        
+
         // Observar todas las imágenes con data-src
         document.querySelectorAll('img[data-src]').forEach(img => {
             imageObserver.observe(img);

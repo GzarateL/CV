@@ -479,3 +479,20 @@
 .projects-section::-webkit-scrollbar-thumb:hover {
     background: rgba(168, 85, 247, 0.8);
 }
+
+/* In your CSS file */
+@media (pointer: coarse) { /* For touch devices */
+    .project-card:hover {
+        /* Disable any hover effects here */
+        box-shadow: none !important;
+        transform: none !important;
+        /* ... other hover properties you want to disable ... */
+    }
+}
+
+@media (max-width: 768px) {
+    .project-card {
+        transition: all 0.2s ease !important; /* Quicker transitions on mobile */
+        box-shadow: none !important; /* Ensure no persistent shadow */
+    }
+}
