@@ -187,7 +187,6 @@ async function requestGyroPermission() {
         }
     } catch (error) {
         console.error('Error al solicitar permisos de giroscopio:', error);
-        showNotification('No se pudo activar el movimiento automático.', 'error');
         gyroSupported = false;
     }
 }
