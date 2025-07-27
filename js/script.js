@@ -174,16 +174,16 @@ function isMobileDevice() {
            (window.innerWidth <= 768 && 'ontouchstart' in window);
 }
 
-// ===== CONFIGURACIÓN DEL GIROSCOPIO =====
-
 // NUEVA FUNCIÓN para solicitar permisos automáticamente
 async function requestGyroPermission() {
     try {
+        // This will trigger the browser's native permission prompt
         const permission = await DeviceOrientationEvent.requestPermission();
         if (permission === 'granted') {
             startGyroListening();
         } else {
             gyroSupported = false;
+            console.log('Permiso de giroscopio denegado.');
         }
     } catch (error) {
         console.error('Error al solicitar permisos de giroscopio:', error);
@@ -197,14 +197,14 @@ function initGyroscope() {
         gyroSupported = true;
         
         if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+            // Request permission on browsers that require it (e.g., iOS 13+)
             requestGyroPermission();
         } else {
+            // For browsers that don't require explicit permission (older or Android)
             startGyroListening();
-            // Opcional: podrías mostrar una notificación aquí si quieres
-            // showNotification('Movimiento 3D activado.', 'success');
         }
     } else {
-        console.log('Giroscopio no soportado en este dispositivo');
+        console.log('Giroscopio no soportado en este dispositivo.');
         gyroSupported = false;
     }
 }
@@ -213,7 +213,7 @@ function initGyroscope() {
 function startGyroListening() {
     window.addEventListener('deviceorientation', handleDeviceOrientation, true);
     isGyroActive = true;
-    console.log('Giroscopio activado');
+    console.log('Giroscopio activado.');
 }
 
 // Manejar eventos de orientación del dispositivo
@@ -225,7 +225,6 @@ function handleDeviceOrientation(event) {
     deviceOrientation.gamma = event.gamma || 0;
 }
 
-// ===== EFECTO DE SEGUIMIENTO UNIFICADO =====
 function lerp(start, end, factor) {
     return start + (end - start) * factor;
 }
@@ -303,17 +302,16 @@ function setupDeviceInteractions() {
     isMobile = isMobileDevice();
     
     if (isMobile) {
-        console.log('Dispositivo móvil detectado - Inicializando giroscopio');
+        console.log('Dispositivo móvil detectado - Inicializando giroscopio.');
         isMouseTracking = false;
-        initGyroscope();
+        initGyroscope(); // This will trigger the permission prompt if needed
     } else {
-        console.log('Dispositivo de escritorio detectado - Usando mouse');
+        console.log('Dispositivo de escritorio detectado - Usando mouse.');
         isMouseTracking = true;
         isGyroActive = false;
     }
 }
 
-// ===== EFECTOS ADICIONALES PARA NAVEGACIÓN =====
 function createNavigationParticles(button) {
     const rect = button.getBoundingClientRect();
     const particleCount = 8;
@@ -356,7 +354,7 @@ function createNavigationParticles(button) {
 
 // Inicialización cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
-    setupDeviceInteractions();
+    setupDeviceInteractions(); // Calls initGyroscope if on mobile
     
     const navButtons = document.querySelectorAll('.nav-btn');
     navButtons.forEach(btn => {
@@ -431,7 +429,6 @@ document.addEventListener('mouseenter', function() {
     }
 });
 
-// ===== FUNCIONES DE UTILIDAD GLOBALES =====
 function createPageTransition(targetPage) {
     const overlay = document.createElement('div');
     overlay.style.cssText = `
