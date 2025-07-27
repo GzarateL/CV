@@ -175,63 +175,41 @@ function isMobileDevice() {
 }
 
 // ===== CONFIGURACIÓN DEL GIROSCOPIO =====
+
+// NUEVA FUNCIÓN para solicitar permisos automáticamente
+async function requestGyroPermission() {
+    try {
+        const permission = await DeviceOrientationEvent.requestPermission();
+        if (permission === 'granted') {
+            startGyroListening();
+            showNotification('¡Movimiento 3D activado!', 'success');
+        } else {
+            showNotification('Permiso de movimiento no concedido. Se usará el modo estático.', 'info');
+            gyroSupported = false;
+        }
+    } catch (error) {
+        console.error('Error al solicitar permisos de giroscopio:', error);
+        showNotification('No se pudo activar el movimiento automático.', 'error');
+        gyroSupported = false;
+    }
+}
+
+// FUNCIÓN ACTUALIZADA para inicializar el giroscopio
 function initGyroscope() {
-    // Verificar si el dispositivo soporta orientation
     if (window.DeviceOrientationEvent) {
         gyroSupported = true;
         
-        // Para iOS 13+ necesitamos pedir permisos
         if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-            // Crear botón para solicitar permisos en iOS
-            showGyroPermissionButton();
+            requestGyroPermission();
         } else {
-            // Android y versiones anteriores de iOS
             startGyroListening();
+            // Opcional: podrías mostrar una notificación aquí si quieres
+            // showNotification('Movimiento 3D activado.', 'success');
         }
     } else {
         console.log('Giroscopio no soportado en este dispositivo');
         gyroSupported = false;
     }
-}
-
-// Mostrar botón para solicitar permisos de giroscopio (iOS)
-function showGyroPermissionButton() {
-    const permissionBtn = document.createElement('button');
-    permissionBtn.innerHTML = '📱 Activar movimiento 3D';
-    permissionBtn.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: linear-gradient(45deg, #a855f7, #e879f9);
-        color: white;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 25px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        z-index: 1000;
-        box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
-        transition: all 0.3s ease;
-    `;
-    
-    permissionBtn.addEventListener('click', async () => {
-        try {
-            const permission = await DeviceOrientationEvent.requestPermission();
-            if (permission === 'granted') {
-                startGyroListening();
-                permissionBtn.remove();
-                showNotification('¡Movimiento 3D activado!', 'success');
-            } else {
-                showNotification('Permisos denegados', 'error');
-            }
-        } catch (error) {
-            console.error('Error al solicitar permisos:', error);
-            showNotification('Error al activar el movimiento', 'error');
-        }
-    });
-    
-    document.body.appendChild(permissionBtn);
 }
 
 // Iniciar escucha del giroscopio
@@ -245,10 +223,9 @@ function startGyroListening() {
 function handleDeviceOrientation(event) {
     if (!isMobile || !isGyroActive) return;
     
-    // Obtener valores de orientación
-    deviceOrientation.alpha = event.alpha || 0; // 0-360 grados
-    deviceOrientation.beta = event.beta || 0;   // -180 a 180 grados
-    deviceOrientation.gamma = event.gamma || 0; // -90 a 90 grados
+    deviceOrientation.alpha = event.alpha || 0;
+    deviceOrientation.beta = event.beta || 0;
+    deviceOrientation.gamma = event.gamma || 0;
 }
 
 // ===== EFECTO DE SEGUIMIENTO UNIFICADO =====
@@ -278,20 +255,14 @@ function animateCharacterFollow() {
     let moveY = 0;
     
     if (isMobile && isGyroActive) {
-        // Usar giroscopio en móviles
         const maxMove = 30;
-        
-        // Gamma controla movimiento horizontal (-90 a 90)
-        // Beta controla movimiento vertical (-180 a 180, pero usamos rango menor)
         moveX = (deviceOrientation.gamma / 90) * maxMove;
-        moveY = (deviceOrientation.beta / 180) * maxMove * 0.5; // Reducir sensibilidad vertical
+        moveY = (deviceOrientation.beta / 180) * maxMove * 0.5;
         
-        // Limitar el rango
         moveX = Math.max(-maxMove, Math.min(maxMove, moveX));
         moveY = Math.max(-maxMove * 0.7, Math.min(maxMove * 0.7, moveY));
         
     } else if (!isMobile) {
-        // Usar mouse en escritorio
         const containerRect = characterContainer.getBoundingClientRect();
         const centerX = containerRect.left + containerRect.width / 2;
         const centerY = containerRect.top + containerRect.height / 2;
@@ -304,17 +275,14 @@ function animateCharacterFollow() {
         moveY = Math.max(-maxMove, Math.min(maxMove, deltaY * 0.035));
     }
     
-    // Obtener posición actual para suavizado
     const currentTransform = characterImage.style.transform || 'translate(0px, 0px)';
     const currentX = parseFloat(currentTransform.match(/translateX?\(([^)]+)px\)/) ? currentTransform.match(/translateX?\(([^)]+)px\)/)[1] : 0);
     const currentY = parseFloat(currentTransform.match(/translateY\(([^)]+)px\)/) ? currentTransform.match(/translateY\(([^)]+)px\)/)[1] : 0);
     
-    // Suavizar el movimiento
-    const lerpFactor = isMobile ? 0.08 : 0.1; // Más suave en móviles
+    const lerpFactor = isMobile ? 0.08 : 0.1;
     const smoothX = lerp(currentX, moveX, lerpFactor);
     const smoothY = lerp(currentY, moveY, lerpFactor);
     
-    // Aplicar la transformación
     characterImage.style.transform = `translate(${smoothX}px, ${smoothY}px)`;
     characterImage.style.transition = isMobile ? 'transform 0.15s ease-out' : 'transform 0.1s ease-out';
     
@@ -339,7 +307,7 @@ function setupDeviceInteractions() {
     
     if (isMobile) {
         console.log('Dispositivo móvil detectado - Inicializando giroscopio');
-        isMouseTracking = false; // Desactivar seguimiento de mouse
+        isMouseTracking = false;
         initGyroscope();
     } else {
         console.log('Dispositivo de escritorio detectado - Usando mouse');
@@ -376,14 +344,8 @@ function createNavigationParticles(button) {
         const duration = 800 + Math.random() * 400;
         
         particle.animate([
-            {
-                transform: 'translate(-50%, -50%) scale(1)',
-                opacity: 1
-            },
-            {
-                transform: `translate(${-50 + Math.cos(angle) * distance}%, ${-50 + Math.sin(angle) * distance}%) scale(0)`,
-                opacity: 0
-            }
+            { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+            { transform: `translate(${-50 + Math.cos(angle) * distance}%, ${-50 + Math.sin(angle) * distance}%) scale(0)`, opacity: 0 }
         ], {
             duration: duration,
             easing: 'ease-out'
@@ -397,10 +359,8 @@ function createNavigationParticles(button) {
 
 // Inicialización cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
-    // Configurar según el tipo de dispositivo
     setupDeviceInteractions();
     
-    // Configurar botones de navegación
     const navButtons = document.querySelectorAll('.nav-btn');
     navButtons.forEach(btn => {
         btn.addEventListener('click', function(e) {
@@ -416,12 +376,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Iniciar animación después de cargar
     setTimeout(() => {
         animateCharacterFollow();
     }, 500);
     
-    // Agregar transiciones suaves
     const mainElements = [
         '.main-title',
         '.subtitle', 
@@ -438,7 +396,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Manejar cambios de orientación
+// Manejar cambios de orientación y tamaño de ventana
 window.addEventListener('resize', function() {
     setupDeviceInteractions();
 });
@@ -528,10 +486,10 @@ function respectsReducedMotion() {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-// Inicializar
+// Inicializar carga de imagen
 loadCharacterImage('assets/images/personaje_inicio.png');
 
-// Exportar funciones para uso global
+// Exportar funciones para uso global si es necesario
 window.MainPageUtils = {
     createPageTransition,
     showNotification,
