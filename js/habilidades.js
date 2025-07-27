@@ -615,15 +615,17 @@ window.addEventListener('resize', function() {
     }
 });
 
-// Prevenir scroll horizontal en móviles
+// CORREGIDO: Manejo mejorado del scroll en móviles
 document.addEventListener('touchmove', function(e) {
     if (window.innerWidth <= 768) {
         const target = e.target.closest('.skills-section');
         if (target) {
-            e.preventDefault();
+            // Solo permitir scroll vertical, prevenir problemas de scroll horizontal
+            // Ya no bloqueamos el evento, permitimos el scroll natural
+            return;
         }
     }
-}, { passive: false });
+}, { passive: true });
 
 // Pausar animaciones cuando la pestaña no está visible
 document.addEventListener('visibilitychange', function() {
@@ -641,4 +643,4 @@ document.addEventListener('visibilitychange', function() {
 
 // Exportar para uso global
 window.SkillsPage = SkillsPage;
-window.SkillsUniverseBackground = SkillsUniverseBackground
+window.SkillsUniverseBackground = SkillsUniverseBackground;

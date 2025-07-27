@@ -227,6 +227,26 @@
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* ===== SCROLL SUAVE PERSONALIZADO (AGREGADO) ===== */
+.skills-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.skills-section::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.skills-section::-webkit-scrollbar-thumb {
+    background: rgba(168, 85, 247, 0.6);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.skills-section::-webkit-scrollbar-thumb:hover {
+    background: rgba(168, 85, 247, 0.8);
+}
+
 /* ===== RESPONSIVE DESIGN (AJUSTADO) ===== */
 @media screen and (max-width: 768px) {
     .skills-title { font-size: 3rem; }
@@ -239,7 +259,12 @@
 }
 
 @media screen and (max-width: 480px) {
-    .skills-section { padding-top: 60px; }
+    .skills-section { 
+        padding-top: 60px;
+        /* Asegurar que el scroll funcione en móviles */
+        -webkit-overflow-scrolling: touch;
+        overflow-y: scroll;
+    }
     .skills-title { font-size: 2.2rem; }
     .skills-subtitle { font-size: 1rem; }
     .skills-grid { grid-template-columns: repeat(3, 1fr); }
